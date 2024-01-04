@@ -106,7 +106,6 @@ const App: React.FC = () => {
     if (editor && !editor.canvas.isEmpty()) {
       const canvasData = editor.canvas.toJSON() as fabric.ICanvasOptions;
       saveCanvasToFirebase(canvasData);
-
       alert("Canvas data saved ");
       editor.canvas.clear();
       editor.canvas.renderAll();
