@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fabric } from "fabric";
 import { CirclePicker, ColorResult } from "react-color";
 import "./styles.css";
@@ -12,7 +12,6 @@ const App: React.FC = () => {
   const [selectedObject, setSelectedObject] = useState<fabric.Object | null>(
     null
   );
-  const [showAnnotations, setShowAnnotations] = useState(true);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [fillColor, setFillColor] = useState<string>("#3498db");
   const [showCommentBox, setShowCommentBox] = useState(false);
@@ -69,11 +68,14 @@ const App: React.FC = () => {
     setShowCommentBox(true);
   };
 
-  const addAnnotation = () => {
+  const addTriangle = () => {
     if (editor) {
-      const line = new fabric.Line([10, 10, 100, 100], {
-        stroke: "#ff0000",
-        strokeWidth: 2,
+      const line = new fabric.Triangle({
+        width: 50,
+        height: 50,
+        fill: "#8cfc",
+        top: 100,
+        left: 100,
       });
       editor.canvas.add(line);
     }
@@ -126,6 +128,13 @@ const App: React.FC = () => {
     }
   };
 
+  const clearAll = () => {
+    if (editor) {
+      editor?.canvas.clear();
+      editor?.canvas.renderAll();
+    }
+  };
+
   return (
     <div className="container">
       <h1>Draw Shapes</h1>
@@ -136,6 +145,9 @@ const App: React.FC = () => {
         >
           <i className="fas fa-circle"></i> Add Circle
         </button>
+        <button className="button button-primary" onClick={() => addTriangle()}>
+          <i className="fas fa-angle"></i> Add Triangle
+        </button>
         <button
           className="button button-danger"
           onClick={() => editor?.addRectangle()}
@@ -145,8 +157,11 @@ const App: React.FC = () => {
         <button className="button button-success" onClick={handleSelectObject}>
           <i className="far fa-object-ungroup"></i> Select Object
         </button>
-        <button className="button button-warning" onClick={addAnnotation}>
-          <i className="fas fa-comment-alt"></i> Add Annotation
+        <button
+          className="button button-warning"
+          onClick={() => editor?.addLine()}
+        >
+          Add Annotation
         </button>
         <button className="button button-warning" onClick={AddComment}>
           <i className="fas fa-comment-alt"></i> Add Comment
@@ -181,6 +196,9 @@ const App: React.FC = () => {
         <button className="button" onClick={handleDeleteShape}>
           <i className="fas fa-trash-alt"></i> Delete Shape
         </button>
+        <button className="button" onClick={clearAll}>
+          <i className="fas fa-trash-alt"></i> Clear All
+        </button>
       </div>
 
       {showCommentBox && (
@@ -202,7 +220,6 @@ const App: React.FC = () => {
             <CirclePicker
               color={fillColor}
               onChangeComplete={(color) => handleFillColorChange(color)}
-              // styles={{ display: showColorPicker ? "block" : "none" }}
             />
           )}
         </div>

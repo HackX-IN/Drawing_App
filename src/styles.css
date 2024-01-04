@@ -30,7 +30,7 @@ h1 {
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  margin-right: 0.8rem;
+  row-gap: 0.7rem;
 }
 
 .button-primary {
@@ -59,7 +59,7 @@ h1 {
   width: 70%;
   height: 60%;
   margin-top: 2rem;
-  
+  margin-bottom: 3rem;
 }
 
 .annotation-checkbox {
@@ -95,9 +95,6 @@ h1 {
   gap: 10px;
 }
 
-/* styles.css */
-
-/* ... (previous styles) */
 
 .color-picker {
   margin-top: 20px;
@@ -125,8 +122,8 @@ h1 {
   height: 100px;
   margin-bottom: 10px;
   resize: none;
-  border: 1px solid #ccc; /* Add a border to textarea */
-  padding: 10px; /* Add some padding to textarea */
+  border: 1px solid #ccc; 
+  padding: 10px; 
 }
 
 .comment-box-buttons {

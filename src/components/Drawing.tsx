@@ -1,6 +1,6 @@
 import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
 import { fabric } from "fabric";
-import React from "react";
+import React, { useEffect } from "react";
 
 interface CustomCanvasProps {
   className: string;
@@ -39,6 +39,14 @@ const useEnhancedFabricJSEditor = () => {
         left: 100,
       });
       editor.canvas.add(rectangle);
+    };
+
+    editor.addLine = () => {
+      const line = new fabric.Line([10, 20, 100, 100], {
+        stroke: "black",
+        strokeWidth: 2,
+      });
+      editor.canvas.add(line);
     };
   }
 
