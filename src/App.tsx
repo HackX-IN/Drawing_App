@@ -71,14 +71,14 @@ const App: React.FC = () => {
 
   const addTriangle = () => {
     if (editor) {
-      const line = new fabric.Triangle({
+      const triangle = new fabric.Triangle({
         width: 50,
         height: 50,
         fill: "#8cfc",
         top: 100,
         left: 100,
       });
-      editor.canvas.add(line);
+      editor.canvas.add(triangle);
     }
   };
 
