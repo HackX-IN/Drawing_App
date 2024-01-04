@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { fabric } from "fabric";
 import { CirclePicker, ColorResult } from "react-color";
 import "./styles.css";
-import { addDoc, collection } from "@firebase/firestore";
-import { db } from "./services/firebase";
 import { CommentBox } from "./components/CommentBox";
 import { CustomCanvas, useEnhancedFabricJSEditor } from "./components/Drawing";
+import { saveCanvasToFirebase } from "./services/firebase";
 
 const App: React.FC = () => {
   const { editor, onReady } = useEnhancedFabricJSEditor();
@@ -103,28 +102,16 @@ const App: React.FC = () => {
     }
   };
 
-  const saveCanvasToFirebase = async (canvasData: fabric.ICanvasOptions) => {
-    try {
-      const docRef = await addDoc(collection(db, "Canvas"), {
-        canvasData,
-        timestamp: new Date(),
-      });
-      console.log("Canvas data saved with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  };
-
   const handleSaveCanvas = () => {
     if (editor && !editor.canvas.isEmpty()) {
       const canvasData = editor.canvas.toJSON() as fabric.ICanvasOptions;
       saveCanvasToFirebase(canvasData);
 
-      alert("Canvas data saved to Firebase");
+      alert("Canvas data saved ");
       editor.canvas.clear();
       editor.canvas.renderAll();
     } else {
-      alert("Missing Drawing ....");
+      alert("Missing Canvas ....");
     }
   };
 

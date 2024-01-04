@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { fabric } from "fabric";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -13,4 +14,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export { app, db };
+const saveCanvasToFirebase = async (canvasData: fabric.ICanvasOptions) => {
+  try {
+    const docRef = await addDoc(collection(db, "Canvas"), {
+      canvasData,
+      timestamp: new Date(),
+    });
+    console.log("Canvas data saved with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
+
+export { app, db, saveCanvasToFirebase };

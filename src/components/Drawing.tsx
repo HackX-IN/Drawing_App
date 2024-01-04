@@ -1,6 +1,6 @@
 import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
 import { fabric } from "fabric";
-import React, { useEffect } from "react";
+import React from "react";
 
 interface CustomCanvasProps {
   className: string;
