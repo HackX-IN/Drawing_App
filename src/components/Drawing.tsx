@@ -14,8 +14,6 @@ const CustomCanvas: React.FC<CustomCanvasProps | any> = ({
   return <FabricJSCanvas className={className} onReady={onReady} />;
 };
 
-//custom hook
-
 const useEnhancedFabricJSEditor = () => {
   const { editor, onReady } = useFabricJSEditor();
 

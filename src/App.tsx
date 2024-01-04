@@ -5,6 +5,8 @@ import "./styles.css";
 import { CommentBox } from "./components/CommentBox";
 import { CustomCanvas, useEnhancedFabricJSEditor } from "./components/Drawing";
 import { saveCanvasToFirebase } from "./services/firebase";
+import ShapeButtons from "./components/ShapeButtons";
+import Controls from "./components/ShapeControlButtons";
 
 const App: React.FC = () => {
   const { editor, onReady } = useEnhancedFabricJSEditor();
@@ -124,68 +126,21 @@ const App: React.FC = () => {
   return (
     <div className="container">
       <h1>Draw Shapes</h1>
-      <div className="button-group">
-        <button
-          className="button button-primary"
-          onClick={() => editor?.addCircle()}
-        >
-          <i className="fas fa-circle"></i> Add Circle
-        </button>
-        <button className="button button-primary" onClick={() => addTriangle()}>
-          <i className="fas fa-angle"></i> Add Triangle
-        </button>
-        <button
-          className="button button-danger"
-          onClick={() => editor?.addRectangle()}
-        >
-          <i className="fas fa-square"></i> Add Rectangle
-        </button>
-        <button className="button button-success" onClick={handleSelectObject}>
-          <i className="far fa-object-ungroup"></i> Select Object
-        </button>
-        <button
-          className="button button-warning"
-          onClick={() => editor?.addLine()}
-        >
-          Add Annotation
-        </button>
-        <button className="button button-warning" onClick={AddComment}>
-          <i className="fas fa-comment-alt"></i> Add Comment
-        </button>
-        <button
-          className="button button-success"
-          onClick={() => handleSaveCanvas()}
-        >
-          <i className="fas fa-save"></i> Save Canvas
-        </button>
-      </div>
 
-      <div className="control-buttons">
-        <button className="button" onClick={() => handleMoveShape("up")}>
-          <i className="fas fa-arrow-up"></i> Move Up
-        </button>
-        <button className="button" onClick={() => handleMoveShape("down")}>
-          <i className="fas fa-arrow-down"></i> Move Down
-        </button>
-        <button className="button" onClick={() => handleMoveShape("left")}>
-          <i className="fas fa-arrow-left"></i> Move Left
-        </button>
-        <button className="button" onClick={() => handleMoveShape("right")}>
-          <i className="fas fa-arrow-right"></i> Move Right
-        </button>
-        <button className="button" onClick={() => handleResizeShape(1.1)}>
-          <i className="fas fa-search-plus"></i> Enlarge
-        </button>
-        <button className="button" onClick={() => handleResizeShape(0.9)}>
-          <i className="fas fa-search-minus"></i> Shrink
-        </button>
-        <button className="button" onClick={handleDeleteShape}>
-          <i className="fas fa-trash-alt"></i> Delete Shape
-        </button>
-        <button className="button" onClick={clearAll}>
-          <i className="fas fa-trash-alt"></i> Clear All
-        </button>
-      </div>
+      <ShapeButtons
+        editor={editor}
+        addTriangle={addTriangle}
+        handleSelectObject={handleSelectObject}
+        AddComment={AddComment}
+        handleSaveCanvas={handleSaveCanvas}
+      />
+
+      <Controls
+        handleMoveShape={handleMoveShape}
+        handleResizeShape={handleResizeShape}
+        handleDeleteShape={handleDeleteShape}
+        clearAll={clearAll}
+      />
 
       {showCommentBox && (
         <CommentBox
@@ -194,22 +149,24 @@ const App: React.FC = () => {
         />
       )}
 
-      <div className="color-picker">
-        <label>Colors</label>
-        <div>
-          <input
-            type="checkbox"
-            checked={showColorPicker}
-            onChange={() => setShowColorPicker(!showColorPicker)}
-          />
-          {showColorPicker && (
-            <CirclePicker
-              color={fillColor}
-              onChangeComplete={(color) => handleFillColorChange(color)}
+      {selectedObject && (
+        <div className="color-picker">
+          <label>Colors</label>
+          <div>
+            <input
+              type="checkbox"
+              checked={showColorPicker}
+              onChange={() => setShowColorPicker(!showColorPicker)}
             />
-          )}
+            {showColorPicker && (
+              <CirclePicker
+                color={fillColor}
+                onChangeComplete={(color) => handleFillColorChange(color)}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <CustomCanvas className="canvas" onReady={onReady} />
     </div>
