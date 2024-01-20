@@ -1,12 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import App from "../App";
-import { saveCanvasToFirebase as mockSaveCanvasToFirebase } from "../services/firebase";
-
-jest.mock("../services/firebase", () => ({
-  ...jest.requireActual("../services/firebase"),
-  saveCanvasToFirebase: jest.fn(),
-}));
 
 describe("App Component", () => {
   test("renders without crashing", () => {
