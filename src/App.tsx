@@ -32,7 +32,7 @@ const App: React.FC = () => {
 
       const getData = await getDocs(collectionData);
 
-      const data = getData.docs.map((doc) => ({
+      const data = getData.docs.map((doc: any) => ({
         id: doc.id,
         ...doc.data(),
       }));
