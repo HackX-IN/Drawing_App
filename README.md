@@ -29,5 +29,9 @@ Check out the live demo on https://drawing-app-theta-seven.vercel.app/.
    
 2. **Install Dependencies & Run the Development Server:**
    ```bash
-      yarn install || yarn start
+      npm install || npm start 
+
+3. **Run Test Case:**
+   ```bash
+      npm test | yarn test
 
