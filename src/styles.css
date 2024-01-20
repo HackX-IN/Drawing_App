@@ -148,3 +148,15 @@ h1 {
   color: #fff;
 }
 
+.lists{
+  list-style: none;
+  padding: 5;
+}
+
+.list-item{
+  margin-bottom: 1rem;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+

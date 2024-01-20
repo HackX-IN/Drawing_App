@@ -59,6 +59,12 @@ const ShapeButtons: React.FC<ShapeButtonsProps> = ({
       label="Save Canvas"
       className="button-success"
     />
+    <ShapeButton
+      onClick={() => handleSaveCanvas()}
+      iconClass="fas fa-save"
+      label="Get Canvas"
+      className="button-success"
+    />
   </div>
 );
 

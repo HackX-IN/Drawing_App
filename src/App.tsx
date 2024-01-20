@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fabric } from "fabric";
 import { CirclePicker, ColorResult } from "react-color";
 import "./styles.css";
 import { CommentBox } from "./components/CommentBox";
 import { CustomCanvas, useEnhancedFabricJSEditor } from "./components/Drawing";
-import { saveCanvasToFirebase } from "./services/firebase";
+import { db, saveCanvasToFirebase } from "./services/firebase";
 import ShapeButtons from "./components/ShapeButtons";
 import Controls from "./components/ShapeControlButtons";
+import { collection, getDocs } from "@firebase/firestore";
 
 const App: React.FC = () => {
   const { editor, onReady } = useEnhancedFabricJSEditor();
@@ -16,11 +17,41 @@ const App: React.FC = () => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [fillColor, setFillColor] = useState<string>("#3498db");
   const [showCommentBox, setShowCommentBox] = useState(false);
-
+  const [canvasData, setCanvasData] = useState<any>();
+  const [selectedCanvas, setSelectedCanvas] = useState(null);
   const handleSelectObject = () => {
     if (editor) {
       const selected = editor.canvas.getActiveObject();
       setSelectedObject(selected);
+    }
+  };
+
+  const getCanvasFromFirebase = async () => {
+    try {
+      const collectionData = collection(db, "Canvas");
+
+      const getData = await getDocs(collectionData);
+
+      const data = getData.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setCanvasData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getCanvasFromFirebase();
+  }, []);
+
+  const handleCanvasClick = (canvasItem: any) => {
+    setSelectedCanvas(canvasItem);
+    if (editor) {
+      editor.canvas.clear();
+      editor.canvas.loadFromJSON(canvasItem.canvasData, () => {});
     }
   };
 
@@ -169,6 +200,22 @@ const App: React.FC = () => {
       )}
 
       <CustomCanvas className="canvas" onReady={onReady} />
+
+      <div>
+        <h4>Canvas Data:</h4>
+
+        <ul className="lists">
+          {canvasData?.map((data: any) => (
+            <li
+              className="list-item"
+              key={data.id}
+              onClick={() => handleCanvasClick(data)}
+            >
+              {data.id}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
