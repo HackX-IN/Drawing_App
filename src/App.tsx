@@ -5,7 +5,7 @@ import "./styles.css";
 import { CommentBox } from "./components/CommentBox";
 import { CustomCanvas, useEnhancedFabricJSEditor } from "./components/Drawing";
 import { db, saveCanvasToFirebase } from "./services/firebase";
-import { collection, getDocs } from "@firebase/firestore";
+import { collection, deleteDoc, doc, getDocs } from "@firebase/firestore";
 import ShapeButtons from "./components/ShapeButtons";
 import Controls from "./components/ShapeControlButtons";
 
@@ -21,7 +21,7 @@ const App: React.FC = () => {
   const [fillColor, setFillColor] = useState<string>("#3498db");
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [canvasData, setCanvasData] = useState<any>();
-  const [selectedCanvas, setSelectedCanvas] = useState(null);
+  const [, setSelectedCanvas] = useState(null);
 
   // Select an object in the canvas
   const handleSelectObject = () => {
@@ -51,7 +51,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     getCanvasFromFirebase();
-  }, []);
+  }, [canvasData]);
 
   // Handle click on a canvas item to load its data
   const handleCanvasClick = (canvasItem: any) => {
@@ -170,6 +170,23 @@ const App: React.FC = () => {
     }
   };
 
+  //Delete Item from firebase
+  const deleteCanvasFromFirebase = async (canvasId: string) => {
+    try {
+      const canvasDocRef = doc(db, "Canvas", canvasId);
+      await deleteDoc(canvasDocRef);
+      console.log(`Canvas with ID ${canvasId} deleted successfully`);
+
+      setCanvasData(
+        canvasData.filter((item: any) => {
+          return item.id !== canvasId;
+        })
+      );
+    } catch (error) {
+      console.error(`Error deleting canvas with ID ${canvasId}:`, error);
+    }
+  };
+
   return (
     <div className="container">
       <h1>Draw Shapes</h1>
@@ -227,13 +244,25 @@ const App: React.FC = () => {
         <h4>Canvas Data:</h4>
         <ul className="lists">
           {canvasData?.map((data: any) => (
-            <li
-              className="list-item"
-              key={data.id}
-              onClick={() => handleCanvasClick(data)}
+            <div
+              style={{
+                display: "flex",
+                alignSelf: "center",
+              }}
             >
-              {data.id}
-            </li>
+              <li
+                className="list-item"
+                key={data.id}
+                onClick={() => handleCanvasClick(data)}
+              >
+                {data.id}
+              </li>
+              <i
+                className="fas fa-trash"
+                style={{ marginLeft: 10, alignSelf: "center" }}
+                onClick={() => deleteCanvasFromFirebase(data.id)}
+              ></i>
+            </div>
           ))}
         </ul>
       </div>
