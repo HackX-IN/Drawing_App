@@ -240,32 +240,34 @@ const App: React.FC = () => {
       <CustomCanvas className="canvas" onReady={onReady} />
 
       {/* Display list of canvas data */}
-      <div>
-        <h4>Canvas Data:</h4>
-        <ul className="lists">
-          {canvasData?.map((data: any) => (
-            <div
-              style={{
-                display: "flex",
-                alignSelf: "center",
-              }}
-            >
-              <li
-                className="list-item"
-                key={data.id}
-                onClick={() => handleCanvasClick(data)}
+      {canvasData.length > 0 && (
+        <div>
+          <h4>Canvas Data:</h4>
+          <ul className="lists">
+            {canvasData?.map((data: any) => (
+              <div
+                style={{
+                  display: "flex",
+                  alignSelf: "center",
+                }}
               >
-                {data.id}
-              </li>
-              <i
-                className="fas fa-trash"
-                style={{ marginLeft: 10, alignSelf: "center" }}
-                onClick={() => deleteCanvasFromFirebase(data.id)}
-              ></i>
-            </div>
-          ))}
-        </ul>
-      </div>
+                <li
+                  className="list-item"
+                  key={data.id}
+                  onClick={() => handleCanvasClick(data)}
+                >
+                  {data.id}
+                </li>
+                <i
+                  className="fas fa-trash"
+                  style={{ marginLeft: 10, alignSelf: "center" }}
+                  onClick={() => deleteCanvasFromFirebase(data.id)}
+                ></i>
+              </div>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
