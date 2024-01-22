@@ -13,7 +13,7 @@ const App: React.FC = () => {
   // Initialize fabric.js editor
   const { editor, onReady } = useEnhancedFabricJSEditor();
 
-  // State variables
+  // UseState variables
   const [selectedObject, setSelectedObject] = useState<fabric.Object | null>(
     null
   );
@@ -49,6 +49,7 @@ const App: React.FC = () => {
     }
   };
 
+  //Side-Effects for fetching Data
   useEffect(() => {
     getCanvasFromFirebase();
   }, [canvasData]);
@@ -240,34 +241,33 @@ const App: React.FC = () => {
       <CustomCanvas className="canvas" onReady={onReady} />
 
       {/* Display list of canvas data */}
-      {canvasData.length > 0 && (
-        <div>
-          <h4>Canvas Data:</h4>
-          <ul className="lists">
-            {canvasData?.map((data: any) => (
-              <div
-                style={{
-                  display: "flex",
-                  alignSelf: "center",
-                }}
+
+      <div>
+        <h4>Canvas Data:</h4>
+        <ul className="lists">
+          {canvasData?.map((data: any) => (
+            <div
+              style={{
+                display: "flex",
+                alignSelf: "center",
+              }}
+            >
+              <li
+                className="list-item"
+                key={data.id}
+                onClick={() => handleCanvasClick(data)}
               >
-                <li
-                  className="list-item"
-                  key={data.id}
-                  onClick={() => handleCanvasClick(data)}
-                >
-                  {data.id}
-                </li>
-                <i
-                  className="fas fa-trash"
-                  style={{ marginLeft: 10, alignSelf: "center" }}
-                  onClick={() => deleteCanvasFromFirebase(data.id)}
-                ></i>
-              </div>
-            ))}
-          </ul>
-        </div>
-      )}
+                {data.id}
+              </li>
+              <i
+                className="fas fa-trash"
+                style={{ marginLeft: 10, alignSelf: "center" }}
+                onClick={() => deleteCanvasFromFirebase(data.id)}
+              ></i>
+            </div>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

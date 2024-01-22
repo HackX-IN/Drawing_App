@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="9" failures="0" errors="0" time="1.799">
+  <testsuite name="App Component" errors="0" failures="0" skipped="0" timestamp="2024-01-22T07:22:33" time="0.991" tests="2">
+    <testcase classname="App Component handles saving canvas data to Firebase" name="App Component handles saving canvas data to Firebase" time="0.127">
+    </testcase>
+    <testcase classname="App Component handles fetching canvas data from Firebase" name="App Component handles fetching canvas data from Firebase" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="App Component" errors="0" failures="0" skipped="0" timestamp="2024-01-22T07:22:33" time="1.081" tests="7">
+    <testcase classname="App Component renders without crashing" name="App Component renders without crashing" time="0.122">
+    </testcase>
+    <testcase classname="App Component renders &apos;Draw Shapes&apos; heading" name="App Component renders &apos;Draw Shapes&apos; heading" time="0.019">
+    </testcase>
+    <testcase classname="App Component renders &apos;Add Triangle&apos; button" name="App Component renders &apos;Add Triangle&apos; button" time="0.014">
+    </testcase>
+    <testcase classname="App Component canvas data list is initially empty" name="App Component canvas data list is initially empty" time="0.014">
+    </testcase>
+    <testcase classname="App Component handles canvas data saving" name="App Component handles canvas data saving" time="0.011">
+    </testcase>
+    <testcase classname="App Component handles canvas data retrieving" name="App Component handles canvas data retrieving" time="0.013">
+    </testcase>
+    <testcase classname="App Component handles resizing a shape" name="App Component handles resizing a shape" time="0.021">
+    </testcase>
+  </testsuite>
+</testsuites>
