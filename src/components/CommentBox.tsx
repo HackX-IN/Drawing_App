@@ -16,6 +16,7 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
     setComment(e.target.value);
   };
 
+  //Save comment on canvas
   const handleSubmit = () => {
     if (comment.trim() !== "") {
       onSubmit(comment);

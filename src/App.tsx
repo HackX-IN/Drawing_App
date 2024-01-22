@@ -5,12 +5,15 @@ import "./styles.css";
 import { CommentBox } from "./components/CommentBox";
 import { CustomCanvas, useEnhancedFabricJSEditor } from "./components/Drawing";
 import { db, saveCanvasToFirebase } from "./services/firebase";
+import { collection, getDocs } from "@firebase/firestore";
 import ShapeButtons from "./components/ShapeButtons";
 import Controls from "./components/ShapeControlButtons";
-import { collection, getDocs } from "@firebase/firestore";
 
 const App: React.FC = () => {
+  // Initialize fabric.js editor
   const { editor, onReady } = useEnhancedFabricJSEditor();
+
+  // State variables
   const [selectedObject, setSelectedObject] = useState<fabric.Object | null>(
     null
   );
@@ -19,6 +22,8 @@ const App: React.FC = () => {
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [canvasData, setCanvasData] = useState<any>();
   const [selectedCanvas, setSelectedCanvas] = useState(null);
+
+  // Select an object in the canvas
   const handleSelectObject = () => {
     if (editor) {
       const selected = editor.canvas.getActiveObject();
@@ -26,12 +31,13 @@ const App: React.FC = () => {
     }
   };
 
+  // Fetch canvas data from Firebase on component mount
   const getCanvasFromFirebase = async () => {
     try {
       const collectionData = collection(db, "Canvas");
-
       const getData = await getDocs(collectionData);
 
+      // Map fetched data to state
       const data = getData.docs.map((doc: any) => ({
         id: doc.id,
         ...doc.data(),
@@ -47,6 +53,7 @@ const App: React.FC = () => {
     getCanvasFromFirebase();
   }, []);
 
+  // Handle click on a canvas item to load its data
   const handleCanvasClick = (canvasItem: any) => {
     setSelectedCanvas(canvasItem);
     if (editor) {
@@ -55,6 +62,7 @@ const App: React.FC = () => {
     }
   };
 
+  // Move the selected object in the canvas
   const handleMoveShape = (direction: "up" | "down" | "left" | "right") => {
     if (selectedObject && editor) {
       switch (direction) {
@@ -79,6 +87,7 @@ const App: React.FC = () => {
     }
   };
 
+  // Resize the selected object in the canvas
   const handleResizeShape = (scale: number) => {
     if (selectedObject && editor) {
       selectedObject.scaleX! *= scale;
@@ -89,6 +98,7 @@ const App: React.FC = () => {
     }
   };
 
+  // Delete the selected object from the canvas
   const handleDeleteShape = () => {
     if (selectedObject && editor) {
       editor.canvas.remove(selectedObject);
@@ -96,10 +106,12 @@ const App: React.FC = () => {
     }
   };
 
+  // Show comment box for adding comments
   const AddComment = () => {
     setShowCommentBox(true);
   };
 
+  // Add a triangle shape to the canvas
   const addTriangle = () => {
     if (editor) {
       const triangle = new fabric.Triangle({
@@ -113,6 +125,7 @@ const App: React.FC = () => {
     }
   };
 
+  // Handle color change in the color picker
   const handleFillColorChange = (color: ColorResult) => {
     setFillColor(color.hex);
     setShowColorPicker(false);
@@ -122,6 +135,7 @@ const App: React.FC = () => {
     }
   };
 
+  // Handle comment submission
   const handleCommentSubmit = (comment: string) => {
     setShowCommentBox(false);
     if (editor) {
@@ -135,6 +149,7 @@ const App: React.FC = () => {
     }
   };
 
+  // Save canvas data to Firebase
   const handleSaveCanvas = () => {
     if (editor && !editor.canvas.isEmpty()) {
       const canvasData = editor.canvas.toJSON() as fabric.ICanvasOptions;
@@ -147,6 +162,7 @@ const App: React.FC = () => {
     }
   };
 
+  // Clear the canvas
   const clearAll = () => {
     if (editor) {
       editor?.canvas.clear();
@@ -158,6 +174,7 @@ const App: React.FC = () => {
     <div className="container">
       <h1>Draw Shapes</h1>
 
+      {/* Shape buttons for adding and interacting with shapes */}
       <ShapeButtons
         editor={editor}
         addTriangle={addTriangle}
@@ -166,6 +183,7 @@ const App: React.FC = () => {
         handleSaveCanvas={handleSaveCanvas}
       />
 
+      {/* Controls for moving, resizing, and deleting shapes */}
       <Controls
         handleMoveShape={handleMoveShape}
         handleResizeShape={handleResizeShape}
@@ -173,6 +191,7 @@ const App: React.FC = () => {
         clearAll={clearAll}
       />
 
+      {/* Comment box for adding comments */}
       {showCommentBox && (
         <CommentBox
           onSubmit={handleCommentSubmit}
@@ -180,6 +199,7 @@ const App: React.FC = () => {
         />
       )}
 
+      {/* Color picker for changing shape colors */}
       {selectedObject && (
         <div className="color-picker">
           <label>Colors</label>
@@ -199,11 +219,12 @@ const App: React.FC = () => {
         </div>
       )}
 
+      {/* Canvas component */}
       <CustomCanvas className="canvas" onReady={onReady} />
 
+      {/* Display list of canvas data */}
       <div>
         <h4>Canvas Data:</h4>
-
         <ul className="lists">
           {canvasData?.map((data: any) => (
             <li
